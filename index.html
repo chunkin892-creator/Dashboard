@@ -1,0 +1,485 @@
+行車記錄表
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>浚鍵管理有限公司 - 行車記錄表</title>
+    <!-- 載入 Firebase SDK (v9 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { margin: 0; padding: 12px; background-color: #f0f2f5; color: #333; }
+        .card { background: #ffffff; padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 12px; }
+        h2 { text-align: center; font-size: 18px; margin: 0 0 12px 0; color: #1a365d; }
+        label { display: block; font-size: 13px; font-weight: bold; margin-top: 8px; color: #4a5568; }
+        input, select, button { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 15px; }
+        .row { display: flex; gap: 8px; }
+        .row > div { flex: 1; }
+        .btn-add { background-color: #2b6cb0; color: white; font-weight: bold; border: none; margin-top: 14px; }
+        .btn-export { background-color: #2f855a; color: white; font-weight: bold; border: none; margin-top: 8px; }
+        .btn-search { background-color: #805ad5; color: white; font-weight: bold; border: none; margin-top: 8px; }
+        .btn-del { background-color: #fed7d7; color: #9b2c2c; border: none; padding: 4px 6px; border-radius: 4px; font-size: 11px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 11px; }
+        th, td { border: 1px solid #e2e8f0; padding: 6px 2px; text-align: center; }
+        th { background-color: #edf2f7; color: #2d3748; }
+        .summary { font-weight: bold; background-color: #feebc8; font-size: 13px; }
+        .month-summary { font-weight: bold; background-color: #e9d8fd; font-size: 13px; }
+        .section-title { font-size: 13px; color: #2b6cb0; margin-top: 12px; font-weight: bold; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+        .nav-tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+        .nav-tabs button { flex: 1; padding: 8px; background: #e2e8f0; border: none; font-weight: bold; color: #4a5568; }
+        .nav-tabs button.active { background: #2b6cb0; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .cloud-status { font-size: 11px; text-align: center; color: #2f855a; margin-top: -8px; margin-bottom: 8px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<h2>浚鍵管理有限公司<br><small style="font-size:14px; font-weight:normal;">行車記錄表</small></h2>
+<div class="cloud-status" id="cloudStatus">☁️ 雲端狀態：連線中...</div>
+
+<!-- 切換分頁 -->
+<div class="nav-tabs">
+    <button id="tabBtn1" class="active" onclick="switchTab('tab1')">📝 日常輸入 / 抽查單日</button>
+    <button id="tabBtn2" onclick="switchTab('tab2')">🔍 全年 / 月度歷史分析</button>
+</div>
+
+<!-- 分頁 1：日常輸入 -->
+<div id="tab1" class="tab-content active">
+    <div class="card">
+        <label style="color:#2b6cb0;">📅 選擇 / 切換日期</label>
+        <input type="date" id="recordDate" onchange="switchDate()">
+
+        <div class="row">
+            <div>
+                <label>車牌</label>
+                <input type="text" id="carPlate" placeholder="例如: AB1234" onchange="saveBasicInfo()">
+            </div>
+        </div>
+
+        <div class="row">
+            <div>
+                <label>早更司機</label>
+                <input type="text" id="dayDriver" placeholder="司機姓名" onchange="saveBasicInfo()">
+            </div>
+            <div>
+                <label>夜更司機</label>
+                <input type="text" id="nightDriver" placeholder="司機姓名" onchange="saveBasicInfo()">
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin:0 0 8px 0; font-size:15px;">新增班次紀錄</h3>
+        
+        <div class="row">
+            <div>
+                <label>更次</label>
+                <select id="shiftType">
+                    <option value="早更">早更</option>
+                    <option value="夜更">夜更</option>
+                </select>
+            </div>
+            <div>
+                <label>目的地</label>
+                <select id="destination">
+                    <option value="去 西鐵元朗站">去 西鐵元朗站</option>
+                    <option value="去 大棠/黃泥墩">去 大棠/黃泥墩</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div>
+                <label>開出時間</label>
+                <input type="time" id="departTime">
+            </div>
+        </div>
+
+        <div class="section-title">八達通 / 電子支付人次</div>
+        <div class="row">
+            <div>
+                <label>電子 $9</label>
+                <input type="number" id="count9Elec" value="0" min="0">
+            </div>
+            <div>
+                <label>電子 $6</label>
+                <input type="number" id="count6Elec" value="0" min="0">
+            </div>
+        </div>
+
+        <div class="section-title">現金支付人次</div>
+        <div class="row">
+            <div>
+                <label>現金 $9</label>
+                <input type="number" id="count9Cash" value="0" min="0">
+            </div>
+            <div>
+                <label>現金 $6</label>
+                <input type="number" id="count6Cash" value="0" min="0">
+            </div>
+        </div>
+
+        <button class="btn-add" onclick="addTrip()">＋ 加入並同步至雲端</button>
+    </div>
+
+    <div class="card">
+        <h3 style="margin:0 0 8px 0; font-size:15px;">當日班次明細 (雲端同步)</h3>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>更次</th>
+                        <th>時間</th>
+                        <th>方向</th>
+                        <th>電$9</th>
+                        <th>電$6</th>
+                        <th>現$9</th>
+                        <th>現$6</th>
+                        <th>小計</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tripBody"></tbody>
+            </table>
+        </div>
+
+        <div id="totalSummary" class="summary" style="padding: 10px; margin-top: 10px; border-radius: 6px;">
+            當日總收入：$0
+        </div>
+
+        <button class="btn-export" onclick="exportDayCSV()">📊 匯出當日 CSV</button>
+    </div>
+</div>
+
+<!-- 分頁 2：月度歷史 -->
+<div id="tab2" class="tab-content">
+    <div class="card">
+        <h3 style="margin:0 0 8px 0; font-size:15px; color:#805ad5;">🔍 雲端月度數據檢索</h3>
+        
+        <div class="row">
+            <div>
+                <label>選擇月份</label>
+                <input type="month" id="searchMonth">
+            </div>
+            <div>
+                <label>過濾更次</label>
+                <select id="searchShift">
+                    <option value="ALL">全部更次</option>
+                    <option value="早更">單獨看：早更</option>
+                    <option value="夜更">單獨看：夜更</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="btn-search" onclick="analyzeMonth()">🔎 查詢雲端數據</button>
+    </div>
+
+    <div class="card">
+        <h3 style="margin:0 0 8px 0; font-size:15px;">月度分析結果</h3>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>更次</th>
+                        <th>司機</th>
+                        <th>班次數</th>
+                        <th>電$9</th>
+                        <th>電$6</th>
+                        <th>現$9</th>
+                        <th>現$6</th>
+                        <th>收入小計</th>
+                    </tr>
+                </thead>
+                <tbody id="monthBody">
+                    <tr><td colspan="9">請選擇月份並按下「查詢」</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="monthSummary" class="month-summary" style="padding: 10px; margin-top: 10px; border-radius: 6px;">
+            月度總結：請先進行查詢
+        </div>
+
+        <button class="btn-export" style="background-color:#805ad5;" onclick="exportMonthCSV()">📥 匯出此月份 CSV</button>
+    </div>
+</div>
+
+<script>
+    // Firebase 設定
+    const firebaseConfig = {
+        apiKey: "AIzaSyARbKwABZzFQx9S6MCI-tHY90o8BhTpSWo",
+        authDomain: "passenger-trip-log.firebaseapp.com",
+        databaseURL: "https://passenger-trip-log-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "passenger-trip-log",
+        storageBucket: "passenger-trip-log.firebasestorage.app",
+        messagingSenderId: "733917939499",
+        appId: "1:733917939499:web:5d9dc70b05168dd20e276e",
+        measurementId: "G-ZGFPQHP6KN"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let currentDate = "";
+    let currentDayData = { plate: "", dayDriver: "", nightDriver: "", trips: [] };
+    let activeListener = null;
+
+    window.onload = function() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('recordDate').value = today;
+        document.getElementById('searchMonth').value = today.substring(0, 7);
+        
+        // 記住更次
+        const savedShift = localStorage.getItem('rememberedShift') || '早更';
+        document.getElementById('shiftType').value = savedShift;
+        
+        switchDate();
+    };
+
+    // 當用家揀更次時自動記住
+    document.getElementById('shiftType').addEventListener('change', function() {
+        localStorage.setItem('rememberedShift', this.value);
+    });
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-tabs button').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        if(tabId === 'tab1') document.getElementById('tabBtn1').classList.add('active');
+        if(tabId === 'tab2') document.getElementById('tabBtn2').classList.add('active');
+    }
+
+    function switchDate() {
+        currentDate = document.getElementById('recordDate').value;
+        if (!currentDate) return;
+
+        document.getElementById('cloudStatus').innerText = "☁️ 雲端狀態：資料同步中...";
+
+        if (activeListener) {
+            db.ref('records/' + currentDate).off('value', activeListener);
+        }
+
+        activeListener = db.ref('records/' + currentDate).on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                currentDayData = {
+                    plate: data.plate || '',
+                    dayDriver: data.dayDriver || '',
+                    nightDriver: data.nightDriver || '',
+                    trips: data.trips || []
+                };
+            } else {
+                currentDayData = { plate: '', dayDriver: '', nightDriver: '', trips: [] };
+            }
+
+            document.getElementById('carPlate').value = currentDayData.plate;
+            document.getElementById('dayDriver').value = currentDayData.dayDriver;
+            document.getElementById('nightDriver').value = currentDayData.nightDriver;
+
+            renderTable();
+            document.getElementById('cloudStatus').innerText = "☁️ 雲端狀態：已成功連線至 passenger-trip-log 雲端";
+        }, (error) => {
+            console.error(error);
+            document.getElementById('cloudStatus').innerText = "⚠️ 雲端狀態：連線受阻，請檢查 Firebase 資料庫 Rules 權限設定";
+        });
+    }
+
+    function saveBasicInfo() {
+        currentDayData.plate = document.getElementById('carPlate').value;
+        currentDayData.dayDriver = document.getElementById('dayDriver').value;
+        currentDayData.nightDriver = document.getElementById('nightDriver').value;
+
+        db.ref('records/' + currentDate).update({
+            plate: currentDayData.plate,
+            dayDriver: currentDayData.dayDriver,
+            nightDriver: currentDayData.nightDriver
+        });
+    }
+
+    function addTrip() {
+        if (!currentDate) return;
+
+        const shift = document.getElementById('shiftType').value;
+        const dest = document.getElementById('destination').value;
+        const time = document.getElementById('departTime').value;
+        
+        const c9Elec = parseInt(document.getElementById('count9Elec').value) || 0;
+        const c6Elec = parseInt(document.getElementById('count6Elec').value) || 0;
+        const c9Cash = parseInt(document.getElementById('count9Cash').value) || 0;
+        const c6Cash = parseInt(document.getElementById('count6Cash').value) || 0;
+
+        if (!time) {
+            alert('請選擇開出時間！');
+            return;
+        }
+
+        const elecTotal = (c9Elec * 9) + (c6Elec * 6);
+        const cashTotal = (c9Cash * 9) + (c6Cash * 6);
+        const total = elecTotal + cashTotal;
+
+        const trip = { shift, dest, time, c9Elec, c6Elec, c9Cash, c6Cash, elecTotal, cashTotal, total };
+        
+        currentDayData.trips.push(trip);
+
+        db.ref('records/' + currentDate).set(currentDayData);
+
+        document.getElementById('count9Elec').value = '0';
+        document.getElementById('count6Elec').value = '0';
+        document.getElementById('count9Cash').value = '0';
+        document.getElementById('count6Cash').value = '0';
+    }
+
+    function deleteTrip(index) {
+        if (confirm('確定要刪除此班次紀錄嗎？')) {
+            currentDayData.trips.splice(index, 1);
+            db.ref('records/' + currentDate).set(currentDayData);
+        }
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('tripBody');
+        tbody.innerHTML = '';
+
+        let grandTotal = 0;
+        currentDayData.trips.forEach((t, index) => {
+            grandTotal += t.total;
+            const row = `<tr>
+                <td>${t.shift}</td>
+                <td>${t.time}</td>
+                <td>${t.dest.replace('去 ', '')}</td>
+                <td>${t.c9Elec}</td>
+                <td>${t.c6Elec}</td>
+                <td>${t.c9Cash}</td>
+                <td>${t.c6Cash}</td>
+                <td>$${t.total}</td>
+                <td><button class="btn-del" onclick="deleteTrip(${index})">刪除</button></td>
+            </tr>`;
+            tbody.innerHTML += row;
+        });
+
+        document.getElementById('totalSummary').innerHTML = `<strong>【${currentDate}】當日總收入：$${grandTotal}</strong>`;
+    }
+
+    function analyzeMonth() {
+        const targetMonth = document.getElementById('searchMonth').value;
+        const targetShift = document.getElementById('searchShift').value;
+
+        if (!targetMonth) { alert('請選擇要查詢的月份'); return; }
+
+        document.getElementById('cloudStatus').innerText = "☁️ 雲端狀態：正在抓取月度數據...";
+
+        db.ref('records').once('value').then((snapshot) => {
+            const allRecords = snapshot.val() || {};
+            const monthBody = document.getElementById('monthBody');
+            monthBody.innerHTML = '';
+
+            let mTripsCount = 0, mTotalRev = 0;
+            let m9E = 0, m6E = 0, m9C = 0, m6C = 0;
+
+            const dates = Object.keys(allRecords).filter(d => d.startsWith(targetMonth)).sort();
+
+            if (dates.length === 0) {
+                monthBody.innerHTML = `<tr><td colspan="9">【${targetMonth}】無任何雲端紀錄</td></tr>`;
+                document.getElementById('monthSummary').innerHTML = `月度總結：該月份無資料`;
+                document.getElementById('cloudStatus').innerText = "☁️ 雲端狀態：連線正常";
+                return;
+            }
+
+            dates.forEach(d => {
+                const dayData = allRecords[d];
+                const trips = dayData.trips || [];
+                const filteredTrips = trips.filter(t => targetShift === 'ALL' || t.shift === targetShift);
+
+                if (filteredTrips.length > 0) {
+                    let dayRev = 0, d9E = 0, d6E = 0, d9C = 0, d6C = 0;
+                    filteredTrips.forEach(t => {
+                        dayRev += t.total;
+                        d9E += t.c9Elec; d6E += t.c6Elec;
+                        d9C += t.c9Cash; d6C += t.c6Cash;
+                    });
+
+                    mTripsCount += filteredTrips.length;
+                    mTotalRev += dayRev;
+                    m9E += d9E; m6E += d6E;
+                    m9C += d9C; m6C += d6C;
+
+                    let driverName = targetShift === '早更' ? dayData.dayDriver : (targetShift === '夜更' ? dayData.nightDriver : `${dayData.dayDriver||'-'}/${dayData.nightDriver||'-'}`);
+
+                    const row = `<tr>
+                        <td>${d}</td>
+                        <td>${targetShift}</td>
+                        <td>${driverName}</td>
+                        <td>${filteredTrips.length}</td>
+                        <td>${d9E}</td>
+                        <td>${d6E}</td>
+                        <td>${d9C}</td>
+                        <td>${d6C}</td>
+                        <td><strong>$${dayRev}</strong></td>
+                    </tr>`;
+                    monthBody.innerHTML += row;
+                }
+            });
+
+            document.getElementById('monthSummary').innerHTML = 
+                `<strong>【${targetMonth} (${targetShift})】雲端總結：</strong><br>` +
+                `總班次：${mTripsCount} 班 | 總收入：$${mTotalRev}<br>` +
+                `<small>八達通/電子：$9 人次: ${m9E} | $6 人次: ${m6E}</small><br>` +
+                `<small>現金：$9 人次: ${m9C} | $6 人次: ${m6C}</small>`;
+
+            document.getElementById('cloudStatus').innerText = "☁️ 雲端狀態：連線正常";
+        });
+    }
+
+    // 每日 CSV 匯出加入「司機」欄位
+    function exportDayCSV() {
+        if (currentDayData.trips.length === 0) { alert('當日沒有紀錄可匯出'); return; }
+        
+        let csv = `\uFEFF日期,${currentDate},車牌,${currentDayData.plate}\n更次,司機,開出時間,目的地,八達通9元,八達通6元,現金9元,現金6元,小計(HKD)\n`;
+        
+        currentDayData.trips.forEach(t => {
+            let driverName = t.shift === '早更' ? currentDayData.dayDriver : currentDayData.nightDriver;
+            csv += `${t.shift},${driverName},${t.time},${t.dest},${t.c9Elec},${t.c6Elec},${t.c9Cash},${t.c6Cash},${t.total}\n`;
+        });
+        
+        downloadCSV(csv, `行車記錄_${currentDate}.csv`);
+    }
+
+    function exportMonthCSV() {
+        const targetMonth = document.getElementById('searchMonth').value;
+        const targetShift = document.getElementById('searchShift').value;
+
+        db.ref('records').once('value').then((snapshot) => {
+            const allRecords = snapshot.val() || {};
+            const dates = Object.keys(allRecords).filter(d => d.startsWith(targetMonth)).sort();
+
+            if (dates.length === 0) { alert('沒有該月份的資料可匯出'); return; }
+
+            let csv = `\uFEFF日期,車牌,早更司機,夜更司機,更次,開出時間,目的地,八達通9元,八達通6元,現金9元,現金6元,班次總額(HKD)\n`;
+            dates.forEach(d => {
+                const day = allRecords[d];
+                (day.trips || []).filter(t => targetShift === 'ALL' || t.shift === targetShift).forEach(t => {
+                    csv += `${d},${day.plate},${day.dayDriver},${day.nightDriver},${t.shift},${t.time},${t.dest},${t.c9Elec},${t.c6Elec},${t.c9Cash},${t.c6Cash},${t.total}\n`;
+                });
+            });
+            downloadCSV(csv, `${targetMonth}_雲端行車報表.csv`);
+        });
+    }
+
+    function downloadCSV(csv, fileName) {
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>
