@@ -831,7 +831,6 @@
             workbook.creator = '浚鍵管理有限公司 - 行車記錄表';
             workbook.created = new Date();
 
-            // ===== 封面摘要分頁（改為橫向排列：左邊放標籤，右邊放橫向數據，清晰大方） =====
             const coverSheet = workbook.addWorksheet('封面摘要', {
                 properties: { defaultRowHeight: 22 },
                 pageSetup: { paperSize: 9, orientation: 'landscape', fitToPage: true, fitToWidth: 1, fitToHeight: 1 },
@@ -843,7 +842,6 @@
                 { width: 22 }, { width: 22 }, { width: 22 }, { width: 22 }
             ];
 
-            // 大標題
             coverSheet.mergeCells('A1:F1');
             const titleCell = coverSheet.getCell('A1');
             titleCell.value = '浚鍵管理有限公司';
@@ -887,7 +885,6 @@
                 }
             });
 
-            // 將摘要改為左右橫向對應排列，視覺更舒暢
             const stats = [
                 ['報表生成時間', new Date().toLocaleString('zh-HK'), '涵蓋日數', `${dayCount} 日`],
                 ['總班次', `${totalTrips} 班`, '總收入', `HK$ ${totalRev.toLocaleString()}`],
@@ -897,13 +894,12 @@
 
             let rowIdx = 5;
             stats.forEach(([label1, val1, label2, val2]) => {
-                // 第一組（左側）
                 coverSheet.mergeCells(`A${rowIdx}:B${rowIdx}`);
                 const l1Cell = coverSheet.getCell(`A${rowIdx}`);
                 l1Cell.value = label1;
                 l1Cell.font = { name: '微軟正黑體', size: 11, bold: true, color: { argb: 'FF334155' } };
                 l1Cell.alignment = { horizontal: 'left', vertical: 'middle' };
-                l1Cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' }>();
+                l1Cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
 
                 coverSheet.mergeCells(`C${rowIdx}:C${rowIdx}`);
                 const v1Cell = coverSheet.getCell(`C${rowIdx}`);
@@ -911,7 +907,6 @@
                 v1Cell.font = { name: '微軟正黑體', size: 11, color: { argb: 'FF0F172A' } };
                 v1Cell.alignment = { horizontal: 'left', vertical: 'middle' };
 
-                // 第二組（右側）
                 coverSheet.mergeCells(`D${rowIdx}:E${rowIdx}`);
                 const l2Cell = coverSheet.getCell(`D${rowIdx}`);
                 l2Cell.value = label2;
@@ -929,7 +924,6 @@
                 rowIdx++;
             });
 
-            // ===== 班次明細分頁 =====
             const detailSheet = workbook.addWorksheet('班次明細', {
                 pageSetup: { paperSize: 9, orientation: 'landscape', fitToPage: true, fitToWidth: 1, fitToHeight: 0 },
                 views: [{ state: 'frozen', ySplit: 1, showGridLines: true }]
