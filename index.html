@@ -69,14 +69,12 @@
         input, select, button { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; background: var(--bg-card); color: var(--text-main); transition: border-color 0.2s, background-color 0.3s, color 0.3s; }
         input:focus, select:focus { outline: none; border-color: var(--tab-active); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
         
-        /* 隱除原生 number 輸入框的上下箭咀 */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
             margin: 0; 
         }
 
-        /* ===== 手機專用大型加減按鈕組 ===== */
         .stepper-group {
             display: flex;
             align-items: center;
@@ -400,7 +398,6 @@
     let activeListener = null;
     let activeListenerDate = "";
 
-    // ===== 加減按鈕控制函數 =====
     function adjustCount(elementId, amount) {
         const input = document.getElementById(elementId);
         if (!input) return;
@@ -410,7 +407,6 @@
         input.value = newValue;
     }
 
-    // ===== 主題切換 =====
     function applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
         const toggleBtn = document.getElementById('themeToggle');
@@ -434,7 +430,6 @@
         }
     }
 
-    // ===== 初始化 =====
     document.addEventListener('DOMContentLoaded', function() {
         initTheme();
 
@@ -772,7 +767,6 @@
             });
     }
 
-    // ===== 豪華版 Excel 匯出 (ExcelJS) =====
     function getDateRange(mode) {
         const today = new Date();
         const y = today.getFullYear();
