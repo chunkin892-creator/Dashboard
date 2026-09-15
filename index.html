@@ -68,20 +68,61 @@
         label { display: block; font-size: 13px; font-weight: bold; margin-top: 8px; color: var(--text-label); }
         input, select, button { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; background: var(--bg-card); color: var(--text-main); transition: border-color 0.2s, background-color 0.3s, color 0.3s; }
         input:focus, select:focus { outline: none; border-color: var(--tab-active); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+        
+        /* 隱除原生 number 輸入框的上下箭咀 */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+
+        /* ===== 手機專用大型加減按鈕組 ===== */
+        .stepper-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .stepper-btn {
+            width: 48px;
+            height: 48px;
+            font-size: 22px;
+            font-weight: bold;
+            background-color: var(--tab-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .stepper-btn:active {
+            background-color: var(--tab-active);
+            color: white;
+        }
+        .stepper-input {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            height: 48px;
+            margin-top: 0 !important;
+        }
+
         .row { display: flex; gap: 8px; }
         .row > div { flex: 1; }
-        .btn-add { background-color: var(--btn-add); color: white; font-weight: bold; border: none; margin-top: 14px; cursor: pointer; transition: opacity 0.2s; }
+        .btn-add { background-color: var(--btn-add); color: white; font-weight: bold; border: none; margin-top: 14px; cursor: pointer; padding: 12px; transition: opacity 0.2s; }
         .btn-add:hover { opacity: 0.9; }
-        .btn-export { background-color: var(--btn-export); color: white; font-weight: bold; border: none; margin-top: 8px; cursor: pointer; transition: opacity 0.2s; }
-        .btn-export:hover { opacity: 0.9; }
-        .btn-search { background-color: var(--btn-search); color: white; font-weight: bold; border: none; margin-top: 8px; cursor: pointer; transition: opacity 0.2s; }
+        .btn-search { background-color: var(--btn-search); color: white; font-weight: bold; border: none; margin-top: 8px; cursor: pointer; padding: 12px; transition: opacity 0.2s; }
         .btn-search:hover { opacity: 0.9; }
-        .btn-del { background-color: var(--btn-del-bg); color: var(--btn-del-text); border: none; padding: 4px 6px; border-radius: 4px; font-size: 11px; width: auto; cursor: pointer; }
+        .btn-del { background-color: var(--btn-del-bg); color: var(--btn-del-text); border: none; padding: 6px 10px; border-radius: 4px; font-size: 11px; width: auto; cursor: pointer; }
         table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 11px; }
-        th, td { border: 1px solid var(--border-light); padding: 6px 2px; text-align: center; }
+        th, td { border: 1px solid var(--border-light); padding: 8px 4px; text-align: center; }
         th { background-color: var(--th-bg); color: var(--th-text); }
         .summary { font-weight: bold; background-color: var(--summary-bg); font-size: 13px; color: var(--text-main); border: 1px solid rgba(245, 158, 11, 0.3); }
-        .month-summary { font-weight: bold; background-color: var(--month-summary-bg); font-size: 13px; color: var(--text-main); border: 1px solid rgba(147, 51, 234, 0.3); }
         .section-title { font-size: 13px; color: var(--section-title); margin-top: 12px; font-weight: bold; border-bottom: 1px solid var(--border-light); padding-bottom: 4px; }
         .nav-tabs { display: flex; gap: 4px; margin-bottom: 12px; }
         .nav-tabs button { flex: 1; padding: 10px; background: var(--tab-bg); border: none; font-weight: bold; color: var(--tab-text); cursor: pointer; border-radius: 8px; transition: background 0.2s, color 0.2s; }
@@ -126,7 +167,7 @@
         }
         .luxury-buttons button {
             flex: 1;
-            padding: 10px 6px;
+            padding: 12px 6px;
             font-size: 12px;
             font-weight: bold;
             border: none;
@@ -143,7 +184,7 @@
 </head>
 <body>
 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切換深色/淺色">🌙</button>
-<h2>浚鍵管理有限公司<br><small style="font-size:14px; font-weight:normal; opacity:0.8;">行車記錄表 (個人專用版)</small></h2>
+<h2>浚鍵管理有限公司<br><small style="font-size:14px; font-weight:normal; opacity:0.8;">行車記錄表 (豪華版)</small></h2>
 <div class="cloud-status" id="cloudStatus">☁️ 雲端狀態：連線中...</div>
 
 <div class="nav-tabs">
@@ -199,11 +240,19 @@
         <div class="row">
             <div>
                 <label>電子 $9</label>
-                <input type="number" id="count9Elec" value="0" min="0" inputmode="numeric">
+                <div class="stepper-group">
+                    <button type="button" class="stepper-btn" onclick="adjustCount('count9Elec', -1)">➖</button>
+                    <input type="number" id="count9Elec" value="0" min="0" class="stepper-input" inputmode="numeric">
+                    <button type="button" class="stepper-btn" onclick="adjustCount('count9Elec', 1)">➕</button>
+                </div>
             </div>
             <div>
                 <label>電子 $6</label>
-                <input type="number" id="count6Elec" value="0" min="0" inputmode="numeric">
+                <div class="stepper-group">
+                    <button type="button" class="stepper-btn" onclick="adjustCount('count6Elec', -1)">➖</button>
+                    <input type="number" id="count6Elec" value="0" min="0" class="stepper-input" inputmode="numeric">
+                    <button type="button" class="stepper-btn" onclick="adjustCount('count6Elec', 1)">➕</button>
+                </div>
             </div>
         </div>
 
@@ -211,11 +260,19 @@
         <div class="row">
             <div>
                 <label>現金 $9</label>
-                <input type="number" id="count9Cash" value="0" min="0" inputmode="numeric">
+                <div class="stepper-group">
+                    <button type="button" class="stepper-btn" onclick="adjustCount('count9Cash', -1)">➖</button>
+                    <input type="number" id="count9Cash" value="0" min="0" class="stepper-input" inputmode="numeric">
+                    <button type="button" class="stepper-btn" onclick="adjustCount('count9Cash', 1)">➕</button>
+                </div>
             </div>
             <div>
                 <label>現金 $6</label>
-                <input type="number" id="count6Cash" value="0" min="0" inputmode="numeric">
+                <div class="stepper-group">
+                    <button type="button" class="stepper-btn" onclick="adjustCount('count6Cash', -1)">➖</button>
+                    <input type="number" id="count6Cash" value="0" min="0" class="stepper-input" inputmode="numeric">
+                    <button type="button" class="stepper-btn" onclick="adjustCount('count6Cash', 1)">➕</button>
+                </div>
             </div>
         </div>
 
@@ -246,7 +303,6 @@
         <div id="totalSummary" class="summary" style="padding: 10px; margin-top: 10px; border-radius: 6px;">
             當日總收入：$0
         </div>
-        <button class="btn-export" onclick="exportDayCSV()">📊 匯出當日 CSV</button>
     </div>
 </div>
 
@@ -293,14 +349,13 @@
                 </tbody>
             </table>
         </div>
-        <div id="monthSummary" class="month-summary" style="padding: 10px; margin-top: 10px; border-radius: 6px;">
+        <div id="monthSummary" style="font-weight: bold; background-color: var(--month-summary-bg); font-size: 13px; color: var(--text-main); padding: 10px; margin-top: 10px; border-radius: 6px; border: 1px solid rgba(147, 51, 234, 0.3);">
             月度總結：請先進行查詢
         </div>
-        <button class="btn-export" style="background-color:var(--btn-search);" onclick="exportMonthCSV()">📥 匯出此月份 CSV</button>
 
         <div class="luxury-section">
-            <h4>💎 豪華版 Excel 匯出</h4>
-            <p style="font-size:11px; color:var(--text-label); margin:4px 0;">包含大型標題、文字顯示框、統計摘要及 A4 自動分頁</p>
+            <h4>💎 豪華版 Excel 報表匯出 (A4 自動分頁)</h4>
+            <p style="font-size:11px; color:var(--text-label); margin:4px 0;">包含大型標題、統計摘要及自動排版，一鍵列印最方便</p>
             <label>自定開始日期</label>
             <input type="date" id="luxStartDate">
             <label>自定結束日期</label>
@@ -344,6 +399,16 @@
     let currentDayData = { plate: "", driver: "", trips: [] };
     let activeListener = null;
     let activeListenerDate = "";
+
+    // ===== 加減按鈕控制函數 =====
+    function adjustCount(elementId, amount) {
+        const input = document.getElementById(elementId);
+        if (!input) return;
+        let currentValue = parseInt(input.value, 10) || 0;
+        let newValue = currentValue + amount;
+        if (newValue < 0) newValue = 0;
+        input.value = newValue;
+    }
 
     // ===== 主題切換 =====
     function applyTheme(theme) {
@@ -394,9 +459,7 @@
         const savedShift = localStorage.getItem('rememberedShift') || '早更';
         document.getElementById('shiftType').value = savedShift;
 
-        // 自動載入該更次上次記憶的司機姓名
         loadDriverNameForCurrentShift();
-
         setDefaultTime();
 
         db.ref('.info/connected').on('value', (snap) => {
@@ -677,7 +740,7 @@
                         m9E += d9E; m6E += d6E;
                         m9C += d9C; m6C += d6C;
 
-                        const driverName = filtered[0]?.driver || dayData.driver || '-';
+                        const driverName = filteredTrips[0]?.driver || dayData.driver || '-';
 
                         rows.push(`<tr>
                             <td>${escapeHtml(d)}</td>
@@ -707,68 +770,6 @@
                 console.error(err);
                 alert('查詢失敗：' + err.message);
             });
-    }
-
-    function exportDayCSV() {
-        if (currentDayData.trips.length === 0) { alert('當日沒有紀錄可匯出'); return; }
-
-        let csv = `\uFEFF日期,${currentDate},車牌,${currentDayData.plate}\n更次,司機,開出時間,目的地,八達通9元,八達通6元,現金9元,現金6元,小計(HKD)\n`;
-        currentDayData.trips.forEach(t => {
-            csv += `${t.shift},${t.driver || currentDayData.driver},${t.time},${t.dest},${t.c9Elec},${t.c6Elec},${t.c9Cash},${t.c6Cash},${t.total}\n`;
-        });
-        downloadCSV(csv, `行車記錄_${currentDate}.csv`);
-    }
-
-    function exportMonthCSV() {
-        const targetMonth = document.getElementById('searchMonth').value;
-        const targetShift = document.getElementById('searchShift').value;
-
-        if (!targetMonth) { alert('請先選擇月份'); return; }
-
-        const [year, month] = targetMonth.split('-').map(Number);
-        const lastDayNum = new Date(year, month, 0).getDate();
-        const startDate = `${targetMonth}-01`;
-        const endDate = `${targetMonth}-${String(lastDayNum).padStart(2, '0')}`;
-
-        db.ref('records')
-            .orderByKey()
-            .startAt(startDate)
-            .endAt(endDate + '\uf8ff')
-            .once('value')
-            .then((snapshot) => {
-                const allRecords = snapshot.val() || {};
-                const dates = Object.keys(allRecords).sort();
-
-                if (dates.length === 0) { alert('沒有該月份的資料可匯出'); return; }
-
-                let csv = `\uFEFF日期,車牌,司機,更次,開出時間,目的地,八達通9元,八達通6元,現金9元,現金6元,班次總額(HKD)\n`;
-                dates.forEach(d => {
-                    const day = allRecords[d];
-                    if (!day) return;
-                    normalizeTrips(day.trips)
-                        .filter(t => targetShift === 'ALL' || t.shift === targetShift)
-                        .forEach(t => {
-                            csv += `${d},${day.plate || ''},${t.driver || day.driver || ''},${t.shift},${t.time},${t.dest},${t.c9Elec},${t.c6Elec},${t.c9Cash},${t.c6Cash},${t.total}\n`;
-                        });
-                });
-                downloadCSV(csv, `${targetMonth}_雲端行車報表.csv`);
-            })
-            .catch(err => {
-                console.error(err);
-                alert('匯出失敗：' + err.message);
-            });
-    }
-
-    function downloadCSV(csv, fileName) {
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", fileName);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setTimeout(() => URL.revokeObjectURL(url), 5000);
     }
 
     // ===== 豪華版 Excel 匯出 (ExcelJS) =====
@@ -941,7 +942,6 @@
                 cell.alignment = { horizontal: 'center', vertical: 'middle' };
             });
 
-            let dataRowIdx = 2;
             dates.forEach(d => {
                 const day = allRecords[d];
                 if (!day) return;
@@ -960,7 +960,6 @@
                         c6c: t.c6Cash || 0,
                         total: t.total || 0
                     });
-                    dataRowIdx++;
                 });
             });
 
