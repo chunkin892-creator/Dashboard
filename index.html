@@ -8,79 +8,83 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
     <style>
-        /* ===== 主題變數 ===== */
+        /* ===== 主題變數：全方位美化配色（含全新優化深色模式） ===== */
         :root {
-            --bg-body: #f0f2f5;
+            --bg-body: #f4f6f9;
             --bg-card: #ffffff;
-            --text-main: #333;
-            --text-label: #4a5568;
-            --text-title: #1a365d;
-            --border: #cbd5e0;
-            --border-light: #e2e8f0;
-            --th-bg: #edf2f7;
-            --th-text: #2d3748;
-            --summary-bg: #feebc8;
-            --month-summary-bg: #e9d8fd;
-            --btn-add: #2b6cb0;
-            --btn-export: #2f855a;
-            --btn-search: #805ad5;
-            --btn-del-bg: #fed7d7;
-            --btn-del-text: #9b2c2c;
+            --text-main: #2c3e50;
+            --text-label: #596780;
+            --text-title: #1e3a8a;
+            --border: #e2e8f0;
+            --border-light: #edf2f7;
+            --th-bg: #f8fafc;
+            --th-text: #334155;
+            --summary-bg: #fef3c7;
+            --month-summary-bg: #f3e8ff;
+            --btn-add: #2563eb;
+            --btn-export: #059669;
+            --btn-search: #7c3aed;
+            --btn-del-bg: #fee2e2;
+            --btn-del-text: #991b1b;
             --tab-bg: #e2e8f0;
-            --tab-text: #4a5568;
-            --tab-active: #2b6cb0;
-            --cloud-ok: #2f855a;
-            --cloud-err: #c53030;
-            --section-title: #2b6cb0;
-            --shadow: rgba(0,0,0,0.08);
+            --tab-text: #64748b;
+            --tab-active: #2563eb;
+            --cloud-ok: #059669;
+            --cloud-err: #dc2626;
+            --section-title: #2563eb;
+            --shadow: rgba(0, 0, 0, 0.04);
         }
 
         [data-theme="dark"] {
-            --bg-body: #1a202c;
-            --bg-card: #2d3748;
-            --text-main: #e2e8f0;
-            --text-label: #a0aec0;
-            --text-title: #90cdf4;
-            --border: #4a5568;
-            --border-light: #4a5568;
-            --th-bg: #4a5568;
-            --th-text: #e2e8f0;
-            --summary-bg: #744210;
-            --month-summary-bg: #553c9a;
-            --btn-add: #3182ce;
-            --btn-export: #38a169;
-            --btn-search: #805ad5;
-            --btn-del-bg: #742a2a;
-            --btn-del-text: #feb2b2;
-            --tab-bg: #4a5568;
-            --tab-text: #cbd5e0;
-            --tab-active: #3182ce;
-            --cloud-ok: #68d391;
-            --cloud-err: #fc8181;
-            --section-title: #63b3ed;
-            --shadow: rgba(0,0,0,0.4);
+            --bg-body: #0f172a;         /* 極致舒適的高級石墨深灰，告別刺眼深藍 */
+            --bg-card: #1e293b;         /* 層次分明的柔和深碳灰卡片背景 */
+            --text-main: #f1f5f9;       /* 高對比且柔和的亮白字體 */
+            --text-label: #94a3b8;      /* 柔和清晰的標籤灰字 */
+            --text-title: #60a5fa;      /* 清爽柔和的科技藍主標題 */
+            --border: #334155;          /* 精緻柔和的暗灰邊框 */
+            --border-light: #273548;
+            --th-bg: #334155;
+            --th-text: #f8fafc;
+            --summary-bg: #451a03;      /* 沉穩琥珀總結底色 */
+            --month-summary-bg: #3b0764;  /* 沉穩紫羅蘭總結底色 */
+            --btn-add: #3b82f6;
+            --btn-export: #10b981;
+            --btn-search: #8b5cf6;
+            --btn-del-bg: #7f1d1d;
+            --btn-del-text: #fecaca;
+            --tab-bg: #334155;
+            --tab-text: #94a3b8;
+            --tab-active: #3b82f6;
+            --cloud-ok: #34d399;
+            --cloud-err: #f87171;
+            --section-title: #60a5fa;
+            --shadow: rgba(0, 0, 0, 0.4);
         }
 
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { margin: 0; padding: 12px; background-color: var(--bg-body); color: var(--text-main); transition: background-color 0.3s, color 0.3s; }
-        .card { background: var(--bg-card); padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px var(--shadow); margin-bottom: 12px; transition: background-color 0.3s; }
+        .card { background: var(--bg-card); padding: 16px; border-radius: 12px; box-shadow: 0 4px 12px var(--shadow); margin-bottom: 12px; transition: background-color 0.3s, box-shadow 0.3s; border: 1px solid var(--border); }
         h2 { text-align: center; font-size: 18px; margin: 0 0 12px 0; color: var(--text-title); }
         label { display: block; font-size: 13px; font-weight: bold; margin-top: 8px; color: var(--text-label); }
-        input, select, button { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; background: var(--bg-card); color: var(--text-main); }
+        input, select, button { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; background: var(--bg-card); color: var(--text-main); transition: border-color 0.2s, background-color 0.3s, color 0.3s; }
+        input:focus, select:focus { outline: none; border-color: var(--tab-active); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
         .row { display: flex; gap: 8px; }
         .row > div { flex: 1; }
-        .btn-add { background-color: var(--btn-add); color: white; font-weight: bold; border: none; margin-top: 14px; }
-        .btn-export { background-color: var(--btn-export); color: white; font-weight: bold; border: none; margin-top: 8px; }
-        .btn-search { background-color: var(--btn-search); color: white; font-weight: bold; border: none; margin-top: 8px; }
-        .btn-del { background-color: var(--btn-del-bg); color: var(--btn-del-text); border: none; padding: 4px 6px; border-radius: 4px; font-size: 11px; width: auto; }
+        .btn-add { background-color: var(--btn-add); color: white; font-weight: bold; border: none; margin-top: 14px; cursor: pointer; transition: opacity 0.2s; }
+        .btn-add:hover { opacity: 0.9; }
+        .btn-export { background-color: var(--btn-export); color: white; font-weight: bold; border: none; margin-top: 8px; cursor: pointer; transition: opacity 0.2s; }
+        .btn-export:hover { opacity: 0.9; }
+        .btn-search { background-color: var(--btn-search); color: white; font-weight: bold; border: none; margin-top: 8px; cursor: pointer; transition: opacity 0.2s; }
+        .btn-search:hover { opacity: 0.9; }
+        .btn-del { background-color: var(--btn-del-bg); color: var(--btn-del-text); border: none; padding: 4px 6px; border-radius: 4px; font-size: 11px; width: auto; cursor: pointer; }
         table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 11px; }
         th, td { border: 1px solid var(--border-light); padding: 6px 2px; text-align: center; }
         th { background-color: var(--th-bg); color: var(--th-text); }
-        .summary { font-weight: bold; background-color: var(--summary-bg); font-size: 13px; color: var(--text-main); }
-        .month-summary { font-weight: bold; background-color: var(--month-summary-bg); font-size: 13px; color: var(--text-main); }
+        .summary { font-weight: bold; background-color: var(--summary-bg); font-size: 13px; color: var(--text-main); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .month-summary { font-weight: bold; background-color: var(--month-summary-bg); font-size: 13px; color: var(--text-main); border: 1px solid rgba(147, 51, 234, 0.3); }
         .section-title { font-size: 13px; color: var(--section-title); margin-top: 12px; font-weight: bold; border-bottom: 1px solid var(--border-light); padding-bottom: 4px; }
         .nav-tabs { display: flex; gap: 4px; margin-bottom: 12px; }
-        .nav-tabs button { flex: 1; padding: 8px; background: var(--tab-bg); border: none; font-weight: bold; color: var(--tab-text); }
+        .nav-tabs button { flex: 1; padding: 10px; background: var(--tab-bg); border: none; font-weight: bold; color: var(--tab-text); cursor: pointer; border-radius: 8px; transition: background 0.2s, color 0.2s; }
         .nav-tabs button.active { background: var(--tab-active); color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -110,6 +114,7 @@
             border-radius: 12px;
             padding: 12px;
             margin-top: 12px;
+            background: rgba(124, 58, 237, 0.03);
         }
         .luxury-section h4 {
             margin: 0 0 8px 0;
@@ -130,17 +135,17 @@
             border-radius: 8px;
             cursor: pointer;
             color: white;
+            transition: opacity 0.2s;
         }
-        .btn-luxury-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .btn-luxury-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-        .btn-luxury-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .luxury-buttons button:hover { opacity: 0.9; }
+        .btn-luxury-1 { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+        .btn-luxury-2 { background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); }
+        .btn-luxury-3 { background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%); }
     </style>
 </head>
 <body>
-
 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切換深色/淺色">🌙</button>
-
-<h2>浚鍵管理有限公司<br><small style="font-size:14px; font-weight:normal;">行車記錄表</small></h2>
+<h2>浚鍵管理有限公司<br><small style="font-size:14px; font-weight:normal; opacity:0.8;">行車記錄表 (豪華版)</small></h2>
 <div class="cloud-status" id="cloudStatus">☁️ 雲端狀態：連線中...</div>
 
 <div class="nav-tabs">
@@ -174,7 +179,6 @@
 
     <div class="card">
         <h3 style="margin:0 0 8px 0; font-size:15px;">新增班次紀錄</h3>
-        
         <div class="row">
             <div>
                 <label>更次</label>
@@ -244,11 +248,9 @@
                 <tbody id="tripBody"></tbody>
             </table>
         </div>
-
         <div id="totalSummary" class="summary" style="padding: 10px; margin-top: 10px; border-radius: 6px;">
             當日總收入：$0
         </div>
-
         <button class="btn-export" onclick="exportDayCSV()">📊 匯出當日 CSV</button>
     </div>
 </div>
@@ -256,7 +258,6 @@
 <div id="tab2" class="tab-content">
     <div class="card">
         <h3 style="margin:0 0 8px 0; font-size:15px; color:var(--btn-search);">🔍 雲端月度數據檢索</h3>
-        
         <div class="row">
             <div>
                 <label>選擇月份</label>
@@ -271,7 +272,6 @@
                 </select>
             </div>
         </div>
-
         <button class="btn-search" onclick="analyzeMonth()">🔎 查詢雲端數據</button>
     </div>
 
@@ -297,18 +297,15 @@
                 </tbody>
             </table>
         </div>
-
         <div id="monthSummary" class="month-summary" style="padding: 10px; margin-top: 10px; border-radius: 6px;">
             月度總結：請先進行查詢
         </div>
-
         <button class="btn-export" style="background-color:var(--btn-search);" onclick="exportMonthCSV()">📥 匯出此月份 CSV</button>
 
         <!-- ===== 豪華版 Excel 匯出區 ===== -->
         <div class="luxury-section">
             <h4>💎 豪華版 Excel 匯出</h4>
-            <p style="font-size:11px; color:var(--text-label); margin:4px 0;">包含大型標題、文字顯示框、統計摘要</p>
-
+            <p style="font-size:11px; color:var(--text-label); margin:4px 0;">包含大型標題、文字顯示框、統計摘要及 A4 自動分頁</p>
             <label>自定開始日期</label>
             <input type="date" id="luxStartDate">
             <label>自定結束日期</label>
@@ -324,19 +321,21 @@
 </div>
 
 <script>
-    // ===== Firebase 設定（triple-login-version 專案） =====
+    // ===== Firebase 設定（新專案：driver-s-shift-report） =====
     const firebaseConfig = {
-        apiKey: "AIzaSyAX7Zy5br1ozGOGxHvDeFNY-Ldcjjw8Qgc",
-        authDomain: "triple-login-version.firebaseapp.com",
-        databaseURL: "https://triple-login-version-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "triple-login-version",
-        storageBucket: "triple-login-version.firebasestorage.app",
-        messagingSenderId: "66459706459",
-        appId: "1:66459706459:web:28f99a455652f393da0b7e",
-        measurementId: "G-154MWLGL7E"
+        apiKey: "AIzaSyANWLqV5bIFfMX_-byunnEBQ-gZmSn1cj4",
+        authDomain: "driver-s-shift-report.firebaseapp.com",
+        databaseURL: "https://driver-s-shift-report-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "driver-s-shift-report",
+        storageBucket: "driver-s-shift-report.firebasestorage.app",
+        messagingSenderId: "790331468274",
+        appId: "1:790331468274:web:a0cecd6a8d5f8e157ba36b",
+        measurementId: "G-JZSZKCSS27"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     const db = firebase.database();
 
     // ===== 常量 =====
@@ -356,7 +355,8 @@
     // ===== 主題 =====
     function applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
-        document.getElementById('themeToggle').textContent = theme === 'dark' ? '☀️' : '🌙';
+        const toggleBtn = document.getElementById('themeToggle');
+        if (toggleBtn) toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
         localStorage.setItem('theme', theme);
     }
 
@@ -381,34 +381,42 @@
         initTheme();
 
         const today = new Date().toISOString().split('T')[0];
-        document.getElementById('recordDate').value = today;
-        document.getElementById('searchMonth').value = today.substring(0, 7);
-        document.getElementById('luxStartDate').value = today.substring(0, 7) + '-01';
-        document.getElementById('luxEndDate').value = today;
+        const recordDateEl = document.getElementById('recordDate');
+        const searchMonthEl = document.getElementById('searchMonth');
+        const luxStartEl = document.getElementById('luxStartDate');
+        const luxEndEl = document.getElementById('luxEndDate');
 
-        // 動態生成目的地選項
+        if (recordDateEl) recordDateEl.value = today;
+        if (searchMonthEl) searchMonthEl.value = today.substring(0, 7);
+        if (luxStartEl) luxStartEl.value = today.substring(0, 7) + '-01';
+        if (luxEndEl) luxEndEl.value = today;
+
         const destSelect = document.getElementById('destination');
-        DESTINATIONS.forEach(d => {
-            const opt = document.createElement('option');
-            opt.value = d;
-            opt.textContent = d;
-            destSelect.appendChild(opt);
-        });
-        const savedDest = localStorage.getItem('rememberedDest');
-        if (savedDest && DESTINATIONS.includes(savedDest)) {
-            destSelect.value = savedDest;
+        if (destSelect) {
+            DESTINATIONS.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d;
+                opt.textContent = d;
+                destSelect.appendChild(opt);
+            });
+            const savedDest = localStorage.getItem('rememberedDest');
+            if (savedDest && DESTINATIONS.includes(savedDest)) {
+                destSelect.value = savedDest;
+            }
         }
 
+        const shiftTypeEl = document.getElementById('shiftType');
         const savedShift = localStorage.getItem('rememberedShift') || '早更';
-        document.getElementById('shiftType').value = savedShift;
+        if (shiftTypeEl) shiftTypeEl.value = savedShift;
 
         setDefaultTime();
 
         db.ref('.info/connected').on('value', (snap) => {
             const statusEl = document.getElementById('cloudStatus');
+            if (!statusEl) return;
             if (snap.val() === true) {
                 statusEl.classList.remove('error');
-                statusEl.textContent = "☁️ 雲端狀態：已連線至 triple-login-version";
+                statusEl.textContent = "☁️ 雲端狀態：已連線至 driver-s-shift-report";
             } else {
                 statusEl.classList.add('error');
                 statusEl.textContent = "⚠️ 雲端狀態：離線中，請檢查網絡";
@@ -417,34 +425,46 @@
 
         switchDate();
 
-        document.getElementById('shiftType').addEventListener('change', function() {
-            localStorage.setItem('rememberedShift', this.value);
-        });
-        document.getElementById('destination').addEventListener('change', function() {
-            localStorage.setItem('rememberedDest', this.value);
-        });
+        if (shiftTypeEl) {
+            shiftTypeEl.addEventListener('change', function() {
+                localStorage.setItem('rememberedShift', this.value);
+            });
+        }
+        if (destSelect) {
+            destSelect.addEventListener('change', function() {
+                localStorage.setItem('rememberedDest', this.value);
+            });
+        }
     });
 
     function setDefaultTime() {
         const now = new Date();
         const hh = String(now.getHours()).padStart(2, '0');
         const mm = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById('departTime').value = `${hh}:${mm}`;
+        const timeEl = document.getElementById('departTime');
+        if (timeEl) timeEl.value = `${hh}:${mm}`;
     }
 
-    // ===== 分頁切換 =====
     function switchTab(tabId) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-tabs button').forEach(el => el.classList.remove('active'));
-        
-        document.getElementById(tabId).classList.add('active');
-        if(tabId === 'tab1') document.getElementById('tabBtn1').classList.add('active');
-        if(tabId === 'tab2') document.getElementById('tabBtn2').classList.add('active');
+                
+        const targetTab = document.getElementById(tabId);
+        if (targetTab) targetTab.classList.add('active');
+        if(tabId === 'tab1') {
+            const btn1 = document.getElementById('tabBtn1');
+            if(btn1) btn1.classList.add('active');
+        }
+        if(tabId === 'tab2') {
+            const btn2 = document.getElementById('tabBtn2');
+            if(btn2) btn2.classList.add('active');
+        }
     }
 
-    // ===== 日期切換 =====
     function switchDate() {
-        const newDate = document.getElementById('recordDate').value;
+        const dateEl = document.getElementById('recordDate');
+        if (!dateEl) return;
+        const newDate = dateEl.value;
         if (!newDate) return;
         if (newDate === activeListenerDate && activeListener) return;
 
@@ -456,8 +476,10 @@
         activeListenerDate = newDate;
 
         const statusEl = document.getElementById('cloudStatus');
-        statusEl.classList.remove('error');
-        statusEl.textContent = "☁️ 雲端狀態：資料同步中...";
+        if (statusEl) {
+            statusEl.classList.remove('error');
+            statusEl.textContent = "☁️ 雲端狀態：資料同步中...";
+        }
 
         activeListener = db.ref('records/' + currentDate).on('value', (snapshot) => {
             const data = snapshot.val();
@@ -472,15 +494,21 @@
                 currentDayData = { plate: '', dayDriver: '', nightDriver: '', trips: [] };
             }
 
-            document.getElementById('carPlate').value = currentDayData.plate;
-            document.getElementById('dayDriver').value = currentDayData.dayDriver;
-            document.getElementById('nightDriver').value = currentDayData.nightDriver;
+            const plateEl = document.getElementById('carPlate');
+            const dayDriverEl = document.getElementById('dayDriver');
+            const nightDriverEl = document.getElementById('nightDriver');
+
+            if (plateEl) plateEl.value = currentDayData.plate;
+            if (dayDriverEl) dayDriverEl.value = currentDayData.dayDriver;
+            if (nightDriverEl) nightDriverEl.value = currentDayData.nightDriver;
 
             renderTable();
         }, (error) => {
             console.error(error);
-            statusEl.classList.add('error');
-            statusEl.textContent = "⚠️ 雲端狀態：連線受阻，請檢查 Firebase Rules 權限";
+            if (statusEl) {
+                statusEl.classList.add('error');
+                statusEl.textContent = "⚠️ 雲端狀態：連線受阻，請檢查 Firebase Rules 權限";
+            }
         });
     }
 
@@ -500,9 +528,13 @@
 
     function saveBasicInfo() {
         if (!currentDate) return;
-        currentDayData.plate = document.getElementById('carPlate').value.trim();
-        currentDayData.dayDriver = document.getElementById('dayDriver').value.trim();
-        currentDayData.nightDriver = document.getElementById('nightDriver').value.trim();
+        const plateEl = document.getElementById('carPlate');
+        const dayDriverEl = document.getElementById('dayDriver');
+        const nightDriverEl = document.getElementById('nightDriver');
+
+        currentDayData.plate = plateEl ? plateEl.value.trim() : '';
+        currentDayData.dayDriver = dayDriverEl ? dayDriverEl.value.trim() : '';
+        currentDayData.nightDriver = nightDriverEl ? nightDriverEl.value.trim() : '';
 
         db.ref('records/' + currentDate).update({
             plate: currentDayData.plate,
@@ -517,19 +549,24 @@
     function addTrip() {
         if (!currentDate) return;
 
-        const shift = document.getElementById('shiftType').value;
-        const dest = document.getElementById('destination').value;
-        const time = document.getElementById('departTime').value;
-        
-        const c9Elec = parseInt(document.getElementById('count9Elec').value, 10) || 0;
-        const c6Elec = parseInt(document.getElementById('count6Elec').value, 10) || 0;
-        const c9Cash = parseInt(document.getElementById('count9Cash').value, 10) || 0;
-        const c6Cash = parseInt(document.getElementById('count6Cash').value, 10) || 0;
+        const shiftEl = document.getElementById('shiftType');
+        const destEl = document.getElementById('destination');
+        const timeEl = document.getElementById('departTime');
+        const c9ElecEl = document.getElementById('count9Elec');
+        const c6ElecEl = document.getElementById('count6Elec');
+        const c9CashEl = document.getElementById('count9Cash');
+        const c6CashEl = document.getElementById('count6Cash');
+
+        const shift = shiftEl ? shiftEl.value : '早更';
+        const dest = destEl ? destEl.value : '';
+        const time = timeEl ? timeEl.value : '';
+                
+        const c9Elec = Math.max(0, parseInt(c9ElecEl ? c9ElecEl.value : 0, 10) || 0);
+        const c6Elec = Math.max(0, parseInt(c6ElecEl ? c6ElecEl.value : 0, 10) || 0);
+        const c9Cash = Math.max(0, parseInt(c9CashEl ? c9CashEl.value : 0, 10) || 0);
+        const c6Cash = Math.max(0, parseInt(c6CashEl ? c6CashEl.value : 0, 10) || 0);
 
         if (!time) { alert('請選擇開出時間！'); return; }
-        if ([c9Elec, c6Elec, c9Cash, c6Cash].some(v => v < 0 || !Number.isInteger(v))) {
-            alert('人次必須為非負整數！'); return;
-        }
 
         const elecTotal = (c9Elec * PRICE_9) + (c6Elec * PRICE_6);
         const cashTotal = (c9Cash * PRICE_9) + (c6Cash * PRICE_6);
@@ -546,10 +583,10 @@
         trip.id = tripRef.key;
 
         tripRef.set(trip).then(() => {
-            document.getElementById('count9Elec').value = '0';
-            document.getElementById('count6Elec').value = '0';
-            document.getElementById('count9Cash').value = '0';
-            document.getElementById('count6Cash').value = '0';
+            if (c9ElecEl) c9ElecEl.value = '0';
+            if (c6ElecEl) c6ElecEl.value = '0';
+            if (c9CashEl) c9CashEl.value = '0';
+            if (c6CashEl) c6CashEl.value = '0';
             setDefaultTime();
         }).catch(err => {
             console.error(err);
@@ -558,7 +595,7 @@
     }
 
     function deleteTrip(tripId) {
-        if (!tripId) return;
+        if (!tripId || !currentDate) return;
         if (confirm('確定要刪除此班次紀錄嗎？')) {
             db.ref('records/' + currentDate + '/trips/' + tripId).remove()
                 .catch(err => {
@@ -570,6 +607,8 @@
 
     function renderTable() {
         const tbody = document.getElementById('tripBody');
+        if (!tbody) return;
+
         const rows = [];
         let grandTotal = 0, totalTrips = 0;
         let sum9E = 0, sum6E = 0, sum9C = 0, sum6C = 0;
@@ -604,9 +643,12 @@
             ? rows.join('')
             : '<tr><td colspan="10">當日暫無班次紀錄</td></tr>';
 
-        document.getElementById('totalSummary').innerHTML =
-            `<strong>【${currentDate}】當日總收入：$${grandTotal}</strong><br>` +
-            `<small>總班次：${totalTrips} 班 | 電$9: ${sum9E} | 電$6: ${sum6E} | 現$9: ${sum9C} | 現$6: ${sum6C}</small>`;
+        const totalSummaryEl = document.getElementById('totalSummary');
+        if (totalSummaryEl) {
+            totalSummaryEl.innerHTML =
+                `<strong>【${currentDate}】當日總收入：$${grandTotal}</strong><br>` +
+                `<small>總班次：${totalTrips} 班 | 電$9: ${sum9E} | 電$6: ${sum6E} | 現$9: ${sum9C} | 現$6: ${sum6C}</small>`;
+        }
     }
 
     function escapeHtml(str) {
@@ -620,18 +662,27 @@
     }
 
     function analyzeMonth() {
-        const targetMonth = document.getElementById('searchMonth').value;
-        const targetShift = document.getElementById('searchShift').value;
+        const searchMonthEl = document.getElementById('searchMonth');
+        const searchShiftEl = document.getElementById('searchShift');
+        const targetMonth = searchMonthEl ? searchMonthEl.value : '';
+        const targetShift = searchShiftEl ? searchShiftEl.value : 'ALL';
 
         if (!targetMonth) { alert('請選擇要查詢的月份'); return; }
 
+        const [year, month] = targetMonth.split('-').map(Number);
+        const lastDayNum = new Date(year, month, 0).getDate();
+        const startDate = `${targetMonth}-01`;
+        const endDate = `${targetMonth}-${String(lastDayNum).padStart(2, '0')}`;
+
         const statusEl = document.getElementById('cloudStatus');
-        statusEl.textContent = "☁️ 雲端狀態：正在抓取月度數據...";
+        if (statusEl) {
+            statusEl.textContent = "☁️ 雲端狀態：正在精準抓取月度數據...";
+        }
 
         db.ref('records')
             .orderByKey()
-            .startAt(targetMonth + '-01')
-            .endAt(targetMonth + '-31\uf8ff')
+            .startAt(startDate)
+            .endAt(endDate + '\uf8ff')
             .once('value')
             .then((snapshot) => {
                 const allRecords = snapshot.val() || {};
@@ -642,17 +693,20 @@
                 let m9E = 0, m6E = 0, m9C = 0, m6C = 0;
 
                 const dates = Object.keys(allRecords).sort();
-
                 if (dates.length === 0) {
-                    monthBody.innerHTML = `<tr><td colspan="9">【${targetMonth}】無任何雲端紀錄</td></tr>`;
-                    document.getElementById('monthSummary').innerHTML = `月度總結：該月份無資料`;
-                    statusEl.classList.remove('error');
-                    statusEl.textContent = "☁️ 雲端狀態：已連線至 triple-login-version";
+                    if (monthBody) monthBody.innerHTML = `<tr><td colspan="9">【${targetMonth}】無任何雲端紀錄</td></tr>`;
+                    const monthSummaryEl = document.getElementById('monthSummary');
+                    if (monthSummaryEl) monthSummaryEl.innerHTML = `月度總結：該月份無資料`;
+                    if (statusEl) {
+                        statusEl.classList.remove('error');
+                        statusEl.textContent = "☁️ 雲端狀態：已連線至 driver-s-shift-report";
+                    }
                     return;
                 }
 
                 dates.forEach(d => {
                     const dayData = allRecords[d];
+                    if (!dayData) return;
                     const trips = normalizeTrips(dayData.trips);
                     const filteredTrips = trips.filter(t => targetShift === 'ALL' || t.shift === targetShift);
 
@@ -692,50 +746,64 @@
                     }
                 });
 
-                monthBody.innerHTML = rows.length > 0
-                    ? rows.join('')
-                    : `<tr><td colspan="9">【${targetMonth}】無符合條件的紀錄</td></tr>`;
+                if (monthBody) {
+                    monthBody.innerHTML = rows.length > 0
+                        ? rows.join('')
+                        : `<tr><td colspan="9">【${targetMonth}】無符合條件的紀錄</td></tr>`;
+                }
 
-                document.getElementById('monthSummary').innerHTML =
-                    `<strong>【${targetMonth} (${targetShift})】雲端總結：</strong><br>` +
-                    `總班次：${mTripsCount} 班 | 總收入：$${mTotalRev}<br>` +
-                    `<small>八達通/電子：$9 人次: ${m9E} | $6 人次: ${m6E}</small><br>` +
-                    `<small>現金：$9 人次: ${m9C} | $6 人次: ${m6C}</small>`;
+                const monthSummaryEl = document.getElementById('monthSummary');
+                if (monthSummaryEl) {
+                    monthSummaryEl.innerHTML =
+                        `<strong>【${targetMonth} (${targetShift})】雲端總結：</strong><br>` +
+                        `總班次：${mTripsCount} 班 | 總收入：$${mTotalRev}<br>` +
+                        `<small>八達通/電子：$9 人次: ${m9E} | $6 人次: ${m6E}</small><br>` +
+                        `<small>現金：$9 人次: ${m9C} | $6 人次: ${m6C}</small>`;
+                }
 
-                statusEl.classList.remove('error');
-                statusEl.textContent = "☁️ 雲端狀態：已連線至 triple-login-version";
+                if (statusEl) {
+                    statusEl.classList.remove('error');
+                    statusEl.textContent = "☁️ 雲端狀態：已連線至 driver-s-shift-report";
+                }
             })
             .catch(err => {
                 console.error(err);
-                statusEl.classList.add('error');
-                statusEl.textContent = "⚠️ 雲端狀態：查詢失敗，請檢查權限";
+                if (statusEl) {
+                    statusEl.classList.add('error');
+                    statusEl.textContent = "⚠️ 雲端狀態：查詢失敗，請檢查權限";
+                }
                 alert('查詢失敗：' + err.message);
             });
     }
 
     function exportDayCSV() {
         if (currentDayData.trips.length === 0) { alert('當日沒有紀錄可匯出'); return; }
-        
+
         let csv = `\uFEFF日期,${currentDate},車牌,${currentDayData.plate}\n更次,司機,開出時間,目的地,八達通9元,八達通6元,現金9元,現金6元,小計(HKD)\n`;
-        
         currentDayData.trips.forEach(t => {
             let driverName = t.shift === '早更' ? currentDayData.dayDriver : currentDayData.nightDriver;
             csv += `${t.shift},${driverName},${t.time},${t.dest},${t.c9Elec},${t.c6Elec},${t.c9Cash},${t.c6Cash},${t.total}\n`;
         });
-        
         downloadCSV(csv, `行車記錄_${currentDate}.csv`);
     }
 
     function exportMonthCSV() {
-        const targetMonth = document.getElementById('searchMonth').value;
-        const targetShift = document.getElementById('searchShift').value;
+        const searchMonthEl = document.getElementById('searchMonth');
+        const searchShiftEl = document.getElementById('searchShift');
+        const targetMonth = searchMonthEl ? searchMonthEl.value : '';
+        const targetShift = searchShiftEl ? searchShiftEl.value : 'ALL';
 
         if (!targetMonth) { alert('請先選擇月份'); return; }
 
+        const [year, month] = targetMonth.split('-').map(Number);
+        const lastDayNum = new Date(year, month, 0).getDate();
+        const startDate = `${targetMonth}-01`;
+        const endDate = `${targetMonth}-${String(lastDayNum).padStart(2, '0')}`;
+
         db.ref('records')
             .orderByKey()
-            .startAt(targetMonth + '-01')
-            .endAt(targetMonth + '-31\uf8ff')
+            .startAt(startDate)
+            .endAt(endDate + '\uf8ff')
             .once('value')
             .then((snapshot) => {
                 const allRecords = snapshot.val() || {};
@@ -746,6 +814,7 @@
                 let csv = `\uFEFF日期,車牌,早更司機,夜更司機,更次,開出時間,目的地,八達通9元,八達通6元,現金9元,現金6元,班次總額(HKD)\n`;
                 dates.forEach(d => {
                     const day = allRecords[d];
+                    if (!day) return;
                     normalizeTrips(day.trips)
                         .filter(t => targetShift === 'ALL' || t.shift === targetShift)
                         .forEach(t => {
@@ -769,14 +838,14 @@
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
     }
 
-    // ===== 豪華版 Excel 匯出 =====
+    // ===== 豪華版 Excel 匯出 (ExcelJS - 內建自動 A4 分頁與排版) =====
     function getDateRange(mode) {
         const today = new Date();
         const y = today.getFullYear();
-        const m = today.getMonth(); // 0-indexed
+        const m = today.getMonth(); 
         const monthStr = String(m + 1).padStart(2, '0');
 
         if (mode === 'firstHalf') {
@@ -794,9 +863,12 @@
                 label: `${y}年${m + 1}月 下半個月 (16–${lastDay}號)`
             };
         }
-        // custom
-        const s = document.getElementById('luxStartDate').value;
-        const e = document.getElementById('luxEndDate').value;
+        
+        const luxStartEl = document.getElementById('luxStartDate');
+        const luxEndEl = document.getElementById('luxEndDate');
+        const s = luxStartEl ? luxStartEl.value : '';
+        const e = luxEndEl ? luxEndEl.value : '';
+
         if (!s || !e) {
             alert('請選擇自定開始同結束日期');
             return null;
@@ -812,17 +884,15 @@
         const range = getDateRange(mode);
         if (!range) return;
 
-        // 檢查 ExcelJS 係咪載入成功
         if (typeof ExcelJS === 'undefined') {
             alert('ExcelJS 庫未載入成功，請檢查網絡連線後重試。');
             return;
         }
 
         const statusEl = document.getElementById('cloudStatus');
-        statusEl.textContent = "☁️ 雲端狀態：正在準備豪華版 Excel...";
+        if (statusEl) statusEl.textContent = "☁️ 雲端狀態：正在準備豪華版 Excel...";
 
         try {
-            // 抓取資料
             const snapshot = await db.ref('records')
                 .orderByKey()
                 .startAt(range.start)
@@ -834,18 +904,19 @@
 
             if (dates.length === 0) {
                 alert(`【${range.label}】無任何紀錄可匯出`);
-                statusEl.textContent = "☁️ 雲端狀態：已連線至 triple-login-version";
+                if (statusEl) statusEl.textContent = "☁️ 雲端狀態：已連線至 driver-s-shift-report";
                 return;
             }
 
-            // ===== 建立 Workbook =====
             const workbook = new ExcelJS.Workbook();
             workbook.creator = '浚鍵管理有限公司 - 行車記錄表';
             workbook.created = new Date();
 
             // ===== Sheet 1：封面 / 摘要 =====
             const coverSheet = workbook.addWorksheet('封面摘要', {
-                properties: { defaultRowHeight: 20 }
+                properties: { defaultRowHeight: 20 },
+                pageSetup: { paperSize: 9, orientation: 'portrait', fitToPage: true, fitToWidth: 1, fitToHeight: 1 },
+                views: [{ showGridLines: true }]
             });
 
             coverSheet.columns = [
@@ -853,36 +924,35 @@
                 { width: 18 }, { width: 18 }, { width: 18 }, { width: 18 }
             ];
 
-            // 大型標題
             coverSheet.mergeCells('A1:G1');
             const titleCell = coverSheet.getCell('A1');
             titleCell.value = '浚鍵管理有限公司';
             titleCell.font = { name: '微軟正黑體', size: 28, bold: true, color: { argb: 'FFFFFFFF' } };
             titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
-            titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1A365D' } };
+            titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E3A8A' } };
             coverSheet.getRow(1).height = 50;
 
             coverSheet.mergeCells('A2:G2');
             const subCell = coverSheet.getCell('A2');
             subCell.value = '行車記錄報表';
-            subCell.font = { name: '微軟正黑體', size: 20, bold: true, color: { argb: 'FF2B6CB0' } };
+            subCell.font = { name: '微軟正黑體', size: 20, bold: true, color: { argb: 'FF2563EB' } };
             subCell.alignment = { horizontal: 'center', vertical: 'middle' };
             coverSheet.getRow(2).height = 36;
 
             coverSheet.mergeCells('A3:G3');
             const rangeCell = coverSheet.getCell('A3');
             rangeCell.value = range.label;
-            rangeCell.font = { name: '微軟正黑體', size: 14, bold: true, color: { argb: 'FF4A5568' } };
+            rangeCell.font = { name: '微軟正黑體', size: 14, bold: true, color: { argb: 'FF475569' } };
             rangeCell.alignment = { horizontal: 'center', vertical: 'middle' };
             coverSheet.getRow(3).height = 28;
 
-            // 統計資料
             let totalTrips = 0, totalRev = 0;
             let sum9E = 0, sum6E = 0, sum9C = 0, sum6C = 0;
             let dayCount = 0;
 
             dates.forEach(d => {
                 const day = allRecords[d];
+                if (!day) return;
                 const trips = normalizeTrips(day.trips);
                 if (trips.length > 0) {
                     dayCount++;
@@ -897,7 +967,6 @@
                 }
             });
 
-            // 文字顯示框（用合併單元格 + 邊框 + 底色模擬）
             const stats = [
                 ['報表生成時間', new Date().toLocaleString('zh-HK')],
                 ['涵蓋日數', `${dayCount} 日`],
@@ -914,27 +983,27 @@
                 coverSheet.mergeCells(`A${rowIdx}:B${rowIdx}`);
                 const labelCell = coverSheet.getCell(`A${rowIdx}`);
                 labelCell.value = label;
-                labelCell.font = { name: '微軟正黑體', size: 12, bold: true, color: { argb: 'FF2D3748' } };
+                labelCell.font = { name: '微軟正黑體', size: 12, bold: true, color: { argb: 'FF334155' } };
                 labelCell.alignment = { horizontal: 'left', vertical: 'middle' };
-                labelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEDF2F7' } };
+                labelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
                 labelCell.border = {
-                    top: { style: 'thin', color: { argb: 'FFCBD5E0' } },
-                    left: { style: 'thin', color: { argb: 'FFCBD5E0' } },
-                    bottom: { style: 'thin', color: { argb: 'FFCBD5E0' } },
-                    right: { style: 'thin', color: { argb: 'FFCBD5E0' } }
+                    top: { style: 'thin', color: { argb: 'FFCBD5E1' } },
+                    left: { style: 'thin', color: { argb: 'FFCBD5E1' } },
+                    bottom: { style: 'thin', color: { argb: 'FFCBD5E1' } },
+                    right: { style: 'thin', color: { argb: 'FFCBD5E1' } }
                 };
 
                 coverSheet.mergeCells(`C${rowIdx}:G${rowIdx}`);
                 const valueCell = coverSheet.getCell(`C${rowIdx}`);
                 valueCell.value = value;
-                valueCell.font = { name: '微軟正黑體', size: 12, color: { argb: 'FF1A202C' } };
+                valueCell.font = { name: '微軟正黑體', size: 12, color: { argb: 'FF0F172A' } };
                 valueCell.alignment = { horizontal: 'left', vertical: 'middle' };
                 valueCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFFFF' } };
                 valueCell.border = {
-                    top: { style: 'thin', color: { argb: 'FFCBD5E0' } },
-                    left: { style: 'thin', color: { argb: 'FFCBD5E0' } },
-                    bottom: { style: 'thin', color: { argb: 'FFCBD5E0' } },
-                    right: { style: 'thin', color: { argb: 'FFCBD5E0' } }
+                    top: { style: 'thin', color: { argb: 'FFCBD5E1' } },
+                    left: { style: 'thin', color: { argb: 'FFCBD5E1' } },
+                    bottom: { style: 'thin', color: { argb: 'FFCBD5E1' } },
+                    right: { style: 'thin', color: { argb: 'FFCBD5E1' } }
                 };
 
                 coverSheet.getRow(rowIdx).height = 26;
@@ -942,7 +1011,18 @@
             });
 
             // ===== Sheet 2：明細 =====
-            const detailSheet = workbook.addWorksheet('班次明細');
+            const detailSheet = workbook.addWorksheet('班次明細', {
+                pageSetup: {
+                    paperSize: 9,
+                    orientation: 'landscape',
+                    fitToPage: true,
+                    fitToWidth: 1,
+                    fitToHeight: 0
+                },
+                views: [{ state: 'frozen', ySplit: 1, showGridLines: true }]
+            });
+            detailSheet.sheetProperties.pageSetUpPr = { fitToPage: true };
+
             detailSheet.columns = [
                 { header: '日期', key: 'date', width: 12 },
                 { header: '車牌', key: 'plate', width: 10 },
@@ -957,25 +1037,24 @@
                 { header: '小計(HKD)', key: 'total', width: 12 }
             ];
 
-            // 表頭樣式
             const headerRow = detailSheet.getRow(1);
             headerRow.height = 30;
             headerRow.eachCell((cell) => {
                 cell.font = { name: '微軟正黑體', size: 12, bold: true, color: { argb: 'FFFFFFFF' } };
-                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2B6CB0' } };
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2563EB' } };
                 cell.alignment = { horizontal: 'center', vertical: 'middle' };
                 cell.border = {
-                    top: { style: 'thin', color: { argb: 'FF1A365D' } },
-                    left: { style: 'thin', color: { argb: 'FF1A365D' } },
-                    bottom: { style: 'thin', color: { argb: 'FF1A365D' } },
-                    right: { style: 'thin', color: { argb: 'FF1A365D' } }
+                    top: { style: 'thin', color: { argb: 'FF1E40AF' } },
+                    left: { style: 'thin', color: { argb: 'FF1E40AF' } },
+                    bottom: { style: 'thin', color: { argb: 'FF1E40AF' } },
+                    right: { style: 'thin', color: { argb: 'FF1E40AF' } }
                 };
             });
 
-            // 資料行
             let dataRowIdx = 2;
             dates.forEach(d => {
                 const day = allRecords[d];
+                if (!day) return;
                 const trips = normalizeTrips(day.trips);
                 trips.forEach(t => {
                     const driverName = t.shift === '早更'
@@ -996,15 +1075,14 @@
                         total: t.total || 0
                     });
 
-                    // 交替行顏色
                     const isEven = dataRowIdx % 2 === 0;
                     row.eachCell((cell) => {
-                        cell.font = { name: '微軟正黑體', size: 11, color: { argb: 'FF1A202C' } };
+                        cell.font = { name: '微軟正黑體', size: 11, color: { argb: 'FF0F172A' } };
                         cell.alignment = { horizontal: 'center', vertical: 'middle' };
                         cell.fill = {
                             type: 'pattern',
                             pattern: 'solid',
-                            fgColor: { argb: isEven ? 'FFF7FAFC' : 'FFFFFFFF' }
+                            fgColor: { argb: isEven ? 'FFF8FAFC' : 'FFFFFFFF' }
                         };
                         cell.border = {
                             top: { style: 'thin', color: { argb: 'FFE2E8F0' } },
@@ -1014,14 +1092,11 @@
                         };
                     });
 
-                    // 小計欄加粗
-                    row.getCell('total').font = { name: '微軟正黑體', size: 11, bold: true, color: { argb: 'FF2F855A' } };
-
+                    row.getCell('total').font = { name: '微軟正黑體', size: 11, bold: true, color: { argb: 'FF059669' } };
                     dataRowIdx++;
                 });
             });
 
-            // 合計行
             const totalRow = detailSheet.addRow({
                 date: '合計',
                 plate: '',
@@ -1038,21 +1113,29 @@
 
             totalRow.eachCell((cell) => {
                 cell.font = { name: '微軟正黑體', size: 12, bold: true, color: { argb: 'FFFFFFFF' } };
-                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2F855A' } };
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF059669' } };
                 cell.alignment = { horizontal: 'center', vertical: 'middle' };
                 cell.border = {
-                    top: { style: 'thin', color: { argb: 'FF22543D' } },
-                    left: { style: 'thin', color: { argb: 'FF22543D' } },
-                    bottom: { style: 'thin', color: { argb: 'FF22543D' } },
-                    right: { style: 'thin', color: { argb: 'FF22543D' } }
+                    top: { style: 'thin', color: { argb: 'FF047857' } },
+                    left: { style: 'thin', color: { argb: 'FF047857' } },
+                    bottom: { style: 'thin', color: { argb: 'FF047857' } },
+                    right: { style: 'thin', color: { argb: 'FF047857' } }
                 };
             });
 
-            // 凍結首行
-            detailSheet.views = [{ state: 'frozen', ySplit: 1 }];
-
             // ===== Sheet 3：每日總結 =====
-            const summarySheet = workbook.addWorksheet('每日總結');
+            const summarySheet = workbook.addWorksheet('每日總結', {
+                pageSetup: {
+                    paperSize: 9,
+                    orientation: 'landscape',
+                    fitToPage: true,
+                    fitToWidth: 1,
+                    fitToHeight: 0
+                },
+                views: [{ state: 'frozen', ySplit: 1, showGridLines: true }]
+            });
+            summarySheet.sheetProperties.pageSetUpPr = { fitToPage: true };
+
             summarySheet.columns = [
                 { header: '日期', key: 'date', width: 14 },
                 { header: '車牌', key: 'plate', width: 10 },
@@ -1066,19 +1149,20 @@
             sumHeaderRow.height = 30;
             sumHeaderRow.eachCell((cell) => {
                 cell.font = { name: '微軟正黑體', size: 12, bold: true, color: { argb: 'FFFFFFFF' } };
-                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF805AD5' } };
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF7C3AED' } };
                 cell.alignment = { horizontal: 'center', vertical: 'middle' };
                 cell.border = {
-                    top: { style: 'thin', color: { argb: 'FF553C9A' } },
-                    left: { style: 'thin', color: { argb: 'FF553C9A' } },
-                    bottom: { style: 'thin', color: { argb: 'FF553C9A' } },
-                    right: { style: 'thin', color: { argb: 'FF553C9A' } }
+                    top: { style: 'thin', color: { argb: 'FF6D28D9' } },
+                    left: { style: 'thin', color: { argb: 'FF6D28D9' } },
+                    bottom: { style: 'thin', color: { argb: 'FF6D28D9' } },
+                    right: { style: 'thin', color: { argb: 'FF6D28D9' } }
                 };
             });
 
             let sumRowIdx = 2;
             dates.forEach(d => {
                 const day = allRecords[d];
+                if (!day) return;
                 const trips = normalizeTrips(day.trips);
                 if (trips.length > 0) {
                     const dayTotal = trips.reduce((s, t) => s + (t.total || 0), 0);
@@ -1093,12 +1177,12 @@
 
                     const isEven = sumRowIdx % 2 === 0;
                     row.eachCell((cell) => {
-                        cell.font = { name: '微軟正黑體', size: 11, color: { argb: 'FF1A202C' } };
+                        cell.font = { name: '微軟正黑體', size: 11, color: { argb: 'FF0F172A' } };
                         cell.alignment = { horizontal: 'center', vertical: 'middle' };
                         cell.fill = {
                             type: 'pattern',
                             pattern: 'solid',
-                            fgColor: { argb: isEven ? 'FFF7FAFC' : 'FFFFFFFF' }
+                            fgColor: { argb: isEven ? 'FFF8FAFC' : 'FFFFFFFF' }
                         };
                         cell.border = {
                             top: { style: 'thin', color: { argb: 'FFE2E8F0' } },
@@ -1107,12 +1191,10 @@
                             right: { style: 'thin', color: { argb: 'FFE2E8F0' } }
                         };
                     });
-                    row.getCell('total').font = { name: '微軟正黑體', size: 11, bold: true, color: { argb: 'FF2F855A' } };
+                    row.getCell('total').font = { name: '微軟正黑體', size: 11, bold: true, color: { argb: 'FF059669' } };
                     sumRowIdx++;
                 }
             });
-
-            summarySheet.views = [{ state: 'frozen', ySplit: 1 }];
 
             // ===== 下載 =====
             const buffer = await workbook.xlsx.writeBuffer();
@@ -1124,17 +1206,18 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            setTimeout(() => URL.revokeObjectURL(url), 5000);
 
-            statusEl.textContent = "☁️ 雲端狀態：已連線至 triple-login-version";
+            if (statusEl) statusEl.textContent = "☁️ 雲端狀態：已連線至 driver-s-shift-report";
         } catch (err) {
             console.error(err);
-            statusEl.classList.add('error');
-            statusEl.textContent = "⚠️ 雲端狀態：匯出失敗";
+            if (statusEl) {
+                statusEl.classList.add('error');
+                statusEl.textContent = "⚠️ 雲端狀態：匯出失敗";
+            }
             alert('豪華版 Excel 匯出失敗：' + err.message);
         }
     }
 </script>
-
 </body>
 </html>
